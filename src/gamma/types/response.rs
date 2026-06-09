@@ -221,6 +221,13 @@ pub struct Collection {
     pub header_image_optimized: Option<ImageOptimization>,
 }
 
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct EventMetadata {
+    pub price_to_beat: Option<Decimal>,
+    pub final_price: Option<Decimal>,
+}
+
 /// A prediction market event.
 #[serde_as]
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize, Builder)]
@@ -299,6 +306,7 @@ pub struct Event {
     pub enable_neg_risk: Option<bool>,
     pub automatically_active: Option<bool>,
     pub event_date: Option<NaiveDate>,
+    pub event_metadata: Option<EventMetadata>,
     pub start_time: Option<DateTime<Utc>>,
     pub event_week: Option<i32>,
     pub series_slug: Option<String>,
@@ -334,6 +342,15 @@ pub struct Event {
     pub cumulative_markets: Option<bool>,
     pub away_team_name: Option<String>,
     pub home_team_name: Option<String>,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct FeeSchedule {
+    pub exponent: Option<i32>,
+    pub rate: Option<Decimal>,
+    pub rebate_rate: Option<Decimal>,
+    pub taker_only: Option<bool>,
 }
 
 /// A prediction market.
@@ -499,6 +516,8 @@ pub struct Market {
     pub approved: Option<bool>,
     pub cyom: Option<bool>,
     pub fees_enabled: Option<bool>,
+    pub fee_schedule: Option<FeeSchedule>,
+    pub fee_type: Option<String>,
     pub holding_rewards_enabled: Option<bool>,
     pub neg_risk: Option<bool>,
     #[serde_as(as = "NoneAsEmptyString")]
